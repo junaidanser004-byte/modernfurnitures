@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Furniture Collection</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+
+
+
+
+
+
+
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
+
+
+
+
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+<button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+<h1 class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">Modern Furnitures</h1>
+<div class="search-box">
+ <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+</div>
+<nav>
+ <a href="index.html">Home</a>
+ <a href="products.html" onclick="showProducts()">Products</a>
+ <a href="about.html" onclick="showAbout()">About</a>
+ <a href="contact.html" onclick="showContact()">Contact</a>
+ <a href="track-order.html">Track Order</a>
+ <a href="admin.html">Admin</a>
+ <a href="#" onclick="openCartPanel()" style="position:relative; display:flex; align-items:center; gap:4px;">
+  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+  </svg>
+  <span id="cartCount" style="
+    background:#06ebd4;
+    color:rgb(0, 0, 0);
+    font-size:11px;
+    font-weight:700;
+    border-radius:50%;
+    width:15px;
+    height:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:absolute;
+    top:-8px;
+    right:-8px;
+  ">0</span>
+  Cart
+</a>
+
+
+
+
+ <div class="profile">
+   <button onclick="toggleProfile()" id="profileBtn">&#128100;<span class="profile-label"> Profile</span></button>
+   <div id="profileMenu" class="profile-menu">
+     <!-- Logged OUT -->
+     <div id="menuGuest">
+       <a href="login.html">Login</a>
+       <a href="register.html">Register</a>
+     </div>
+     <!-- Logged IN -->
+     <div id="menuUser" style="display:none;">
+       <div style="padding:10px 14px;border-bottom:1px solid #f3f4f6;">
+         <div style="font-size:11px;color:#9ca3af;margin-bottom:2px;">Logged in as</div>
+         <div id="menuEmail" style="font-size:13px;font-weight:600;color:#1f2937;word-break:break-all;"></div>
+       </div>
+       <a href="#" onclick="logoutUser()" style="color:#ef4444;">Logout</a>
+     </div>
+   </div>
+ </div>
+</nav>
+</header>
+
+
+
+
+
+
+
+
+<!-- MY REVIEWS MODAL -->
+<div id="myReviewsBox" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width:480px;width:95%;">
+    <h2 style="margin-bottom:4px;">⭐ My Reviews</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Your feedback on past orders.</p>
+    <div id="myReviewsList" style="display:flex;flex-direction:column;gap:12px;max-height:360px;overflow-y:auto;"></div>
+    <button class="btn-close" onclick="document.getElementById('myReviewsBox').style.display='none'">Close</button>
+  </div>
+</div>
+
+<!-- BACK BUTTON -->
+<div id="backBtnWrap" style="display:none; padding: 10px 20px; background: white; border-bottom: 1px solid #f3f4f6;">
+<button onclick="goBack()" style="background:none; border:none; cursor:pointer; font-size:14px; font-weight:600; color:#3b82f6; display:flex; align-items:center; gap:6px;">
+ &#8592; Back
+</button>
+</div>
+
+
+
+
+
+
+
+
+<!-- LOGIN MODAL -->
+<div id="loginBox" class="modal" style="display:none;" onclick="if(event.target===this)closeLogin()">
+<div class="modal-content">
+ <h2>Login</h2>
+ <input type="email" id="loginEmail" placeholder="Email">
+ <div style="position:relative; margin-bottom:0;">
+   <input type="password" id="loginPassword" placeholder="Password" style="width:100%; padding-right:42px; box-sizing:border-box;">
+   <span onclick="toggleModalLoginPassword()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#9ca3af; display:flex; align-items:center; user-select:none;">
+     <svg id="modalLoginEyeOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+     <svg id="modalLoginEyeClosed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+   </span>
+ </div>
+ <button class="btn-primary" onclick="loginUser()">Login</button>
+ <button class="btn-close" onclick="closeLogin()">Close</button>
+ <p style="text-align:center;"><a href="#" onclick="openForgot()">Forgot Password?</a></p>
+ <p id="loginMsg"></p>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- REGISTER MODAL -->
+<div id="registerBox" class="modal" style="display:none;">
+<div class="modal-content">
+ <h2>Register</h2>
+ <input type="email" id="regEmail" placeholder="Email">
+ <input type="text" id="regOtp" placeholder="Enter OTP">
+ <div style="position:relative; margin-bottom:0;">
+   <input type="password" id="regPassword" placeholder="Password" style="width:100%; padding-right:42px; box-sizing:border-box;">
+   <span onclick="toggleModalRegPassword()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#9ca3af; display:flex; align-items:center; user-select:none;">
+     <svg id="modalRegEyeOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+     <svg id="modalRegEyeClosed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+   </span>
+ </div>
+ <button class="btn-primary" onclick="sendOtp()">Send OTP</button>
+ <button class="btn-primary" onclick="registerUser()">Register</button>
+ <button class="btn-close" onclick="closeRegister()">Close</button>
+ <p id="registerMsg"></p>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- FORGOT MODAL -->
+<div id="forgotBox" class="modal" style="display:none;">
+<div class="modal-content">
+ <h2>Forgot Password</h2>
+ <p style="color:#0652ec;font-size:13px;margin-bottom:10px;">Enter your email to receive a reset OTP.</p>
+ <input type="email" id="forgotEmail" placeholder="Enter your email">
+ <button class="btn-primary" onclick="sendForgotOtp()">Send OTP</button>
+ <div id="forgotStep2" style="display:none;">
+   <input type="text" id="forgotOtpField" placeholder="Enter OTP">
+   <div style="position:relative; margin-bottom:0;">
+     <input type="password" id="newPassword" placeholder="New Password" style="width:100%; padding-right:42px; box-sizing:border-box;">
+     <span onclick="toggleModalNewPassword()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#9ca3af; display:flex; align-items:center; user-select:none;">
+       <svg id="modalNewEyeOpen" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+       <svg id="modalNewEyeClosed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.477 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+     </span>
+   </div>
+   <button class="btn-primary" onclick="resetPassword()">Reset Password</button>
+ </div>
+ <button class="btn-close" onclick="closeForgot()">Close</button>
+ <p id="forgotMsg"></p>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- HERO -->
+<section id="homeSection" class="hero">
+<div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop')"></div>
+<div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600&auto=format&fit=crop')"></div>
+<div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1600&auto=format&fit=crop')"></div>
+<div class="hero-text">
+ <h2 id="heroTitle"></h2>
+ <p id="heroSub"></p>
+</div>
+</section>
+
+
+
+
+
+
+
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="productModal" class="modal" style="display:none;">
+<div class="product-modal-content">
+ <button class="modal-close-x" onclick="closeProductModal()">&#10005;</button>
+ <div class="product-modal-body">
+   <div class="product-modal-img">
+     <img id="modalImg" src="" alt="">
+   </div>
+   <div class="product-modal-info">
+     <h2 id="modalName"></h2>
+     <p class="modal-price" id="modalPrice"></p>
+     <p class="modal-desc" id="modalDesc"></p>
+     <div id="modalSpecs" class="modal-specs"></div>
+     <button class="btn-add-cart" id="modalCartBtn" onclick="addFromModal()">&#128722; Add to Cart</button>
+     <p id="modalCartMsg"></p>
+   </div>
+ </div>
+</div>
+</div>
+
+
+
+
+<!-- SLIDE-IN CART PANEL -->
+<div id="cartPanel" class="cart-panel">
+<div class="cart-panel-header">
+ <span>SHOPPING CART <span id="cartBadge" class="cart-badge">0</span></span>
+ <button onclick="closeCartPanel()">&#10005;</button>
+</div>
+<hr>
+<div id="cartPanelItems" class="cart-panel-items"></div>
+<div class="cart-panel-footer">
+ <hr>
+ <div class="cart-subtotal">
+   <span>SUBTOTAL:</span>
+   <span id="cartPanelTotal">QAR 0</span>
+ </div>
+   <div class="cart-view-link" onclick="window.location.href='cart.html'">VIEW CART</div>
+ <button class="cart-checkout-btn" onclick="goCheckoutAll()">CHECKOUT</button>
+</div>
+</div>
+<div id="cartOverlay" class="cart-overlay" onclick="closeCartPanel()"></div>
+
+
+
+
+<script src="script.js?v=3"></script>
+
+
+
+
+
+
+
+
+
+<!-- MOBILE SIDE MENU (add before </body>) -->
+<div id="mobileMenu" class="mobile-menu">
+<div class="mobile-menu-header">
+ <span class="mobile-logo">Modern Furnitures</span>
+ <button onclick="toggleMobileMenu()">&#10005;</button>
+</div>
+<div class="mobile-search">
+ <input type="text" placeholder="Search products..." onkeyup="searchProducts(); closeMobileMenu()">
+ <span>&#128269;</span>
+</div>
+<a href="#" onclick="showHome(); closeMobileMenu()">Home</a>
+<a href="#" onclick="showAbout(); closeMobileMenu()">About Us</a>
+<a href="#" onclick="showProducts(); closeMobileMenu()">Products</a>
+<a href="#" onclick="showContact(); closeMobileMenu()">Contact Us</a>
+<a href="track-order.html" onclick="closeMobileMenu()">📦 Track Order</a>
+<a href="#" id="mobileMenuLogin" onclick="openLogin(); closeMobileMenu()">Login / Register</a>
+<a href="admin.html" onclick="closeMobileMenu()">⚙️ Admin Panel</a>
+<a href="#" id="mobileMenuLogout" onclick="logoutUser(); closeMobileMenu()" style="display:none; margin:12px 16px; padding:12px; background:#fee2e2; color:#ef4444; border-radius:8px; font-weight:600; text-align:center;">🚪 Logout</a>
+</div>
+<div id="mobileMenuOverlay" class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+
+
+
+
+
+
+
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+<a href="#" onclick="toggleBottomSearch()">
+ <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+ Search
+</a>
+<a href="#" onclick="openCartPanel()">
+ <div class="bn-cart-wrap">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+   <span class="bn-badge" id="bnCartBadge"> 0 </span>
+ </div>
+ Cart
+</a>
+<a href="categories.html">
+ <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+ Categories
+</a>
+</div>
+
+
+
+
+
+
+
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="search-modal-overlay" onclick="closeSearchModal(event)">
+<div class="search-modal-box">
+ <div class="search-modal-header">
+   <span>TYPE TO SEARCH</span>
+   <button onclick="toggleBottomSearch()">&#10005;</button>
+ </div>
+ <div class="search-modal-input">
+   <input type="text" id="searchModalInput" placeholder="Search products..." onkeyup="searchFromModal()">
+   <span>&#128269;</span>
+ </div>
+</div>
+</div>
+
+
+
+
+<!-- PRODUCTS -->
+<section id="productsSection" style="background:white; padding-bottom:50px; text-align:center;">
+<h2 class="section-title" id="productsTitle">OUR COLLECTIONS</h2>
+<div id="productGrid" style="display:flex; flex-wrap:wrap; justify-content:center; gap:24px; padding:20px 30px; max-width:1400px; margin:0 auto;">
+
+  <div style="width:200px;background:white;border-radius:12px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
+    <img src="https://m.media-amazon.com/images/I/812EhSvR2dL.jpg" alt="Sofa" onclick="viewProduct('Sofa')" style="cursor:pointer;width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h3 style="margin:10px 0 4px;font-size:15px;color:#1f2937;">Sofa</h3><p style="color:#6b7280;font-size:13px;margin-bottom:10px;">QAR 5,000</p>
+    <button class="btn-view" onclick="viewProduct('Sofa')" style="margin-top:auto;">View</button>
+  </div>
+
+  <div style="width:200px;background:white;border-radius:12px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
+    <img src="https://m.media-amazon.com/images/I/51be-GYhI5L._AC_US750_.jpg" alt="Chair" onclick="viewProduct('Chair')" style="cursor:pointer;width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h3 style="margin:10px 0 4px;font-size:15px;color:#1f2937;">Chair</h3><p style="color:#6b7280;font-size:13px;margin-bottom:10px;">QAR 2,000</p>
+    <button class="btn-view" onclick="viewProduct('Chair')" style="margin-top:auto;">View</button>
+  </div>
+
+  <div style="width:200px;background:white;border-radius:12px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
+    <img src="https://cdn.cloudinary.com/dc5ztdzeo/image/upload/c_scale,w_1200/c_crop,g_north_west,x_2,y_16,w_1169,h_877/c_scale,w_1169,h_877/q_auto,f_auto,dpr_2.0/c_limit,w_2000/products/SDTCA02/villa-extension-dining-table-natural-2100mm-2600mm%20(2).jpg" alt="Table" onclick="viewProduct('Table')" style="cursor:pointer;width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h3 style="margin:10px 0 4px;font-size:15px;color:#1f2937;">Table</h3><p style="color:#6b7280;font-size:13px;margin-bottom:10px;">QAR 1,500</p>
+    <button class="btn-view" onclick="viewProduct('Table')" style="margin-top:auto;">View</button>
+  </div>
+
+  <div style="width:200px;background:white;border-radius:12px;padding:14px;box-shadow:0 4px 14px rgba(0,0,0,0.08);display:flex;flex-direction:column;">
+    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&auto=format&fit=crop" alt="Bed" onclick="viewProduct('Bed')" style="cursor:pointer;width:100%;height:150px;object-fit:cover;border-radius:10px;">
+    <h3 style="margin:10px 0 4px;font-size:15px;color:#1f2937;">Bed</h3><p style="color:#6b7280;font-size:13px;margin-bottom:10px;">QAR 8,000</p>
+    <button class="btn-view" onclick="viewProduct('Bed')" style="margin-top:auto;">View</button>
+  </div>
+
+
+</div>
+
+<!-- SHOP MORE -->
+<div id="ShopMoreWrap" style="text-align:center; padding:20px 0 40px;">
+  <button class="shopmorebutton" onclick="location.href='products.html'">Shop More</button>
+</div>
+
+</section>
+
+
+
+
+
+

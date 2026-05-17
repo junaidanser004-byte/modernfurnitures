@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact - Modern Furnitures</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+
+
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+<button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+<h1 class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Modern Furnitures</h1>
+<div class="search-box">
+  <input type="text" placeholder="Search products...">
+</div>
+<nav>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="categories.html">Categories</a>
+  <a href="cart.html">Cart</a>
+  <a href="contact.html">Contact</a>
+</nav>
+</header>
+
+
+
+
+<!-- CONTACT -->
+<section class="contact">
+<h2 class="section-title">Contact Us</h2>
+<p class="contact-sub">We'd love to hear from you. Fill in the form below!</p>
+ <div class="contact-wrapper">
+  <div class="contact-info">
+    <div class="info-card">
+      <span>📍</span>
+      <div><h4>Location</h4><p>Doha, Qatar</p></div>
+    </div>
+    <div class="info-card">
+      <span>📞</span>
+      <div><h4>Phone</h4><p>+974 22334455</p></div>
+    </div>
+    <div class="info-card">
+      <span>📧</span>
+      <div><h4>Email</h4><p>info@modernfurnitures.qa</p></div>
+    </div>
+    <div class="info-card">
+      <span>🕐</span>
+      <div><h4>Working Hours</h4><p>Sun – Thu: 9am – 6pm</p></div>
+    </div>
+  </div>
+
+
+
+
+  <form class="contact-form" onsubmit="submitContact(event)">
+    <input type="text" id="contactName" placeholder="Your Name" required>
+    <input type="email" id="contactEmail" placeholder="Your Email" required>
+    <input type="text" id="contactSubject" placeholder="Subject">
+    <textarea id="contactMessage" placeholder="Your Message..." rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+    <p id="contactMsg"></p>
+  </form>
+</div>
+</section>
+
+
+
+
+<script src="script.js?v=3"></script>
+
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+ <a href="#" onclick="toggleBottomSearch()">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+   </svg>
+   Search
+ </a>
+ <a href="#" onclick="openCartPanel()">
+   <div class="bn-cart-wrap">
+     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+     </svg>
+     <span class="bn-badge" id="bnCartBadge">0</span>
+   </div>
+   Cart
+ </a>
+ <a href="categories.html">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+   </svg>
+   Categories
+ </a>
+</div>
+
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="search-modal-overlay" onclick="closeSearchModal(event)">
+ <div class="search-modal-box">
+   <div class="search-modal-header">
+     <span>TYPE TO SEARCH</span>
+     <button onclick="toggleBottomSearch()">&#10005;</button>
+   </div>
+   <div class="search-modal-input">
+     <input type="text" id="searchModalInput" placeholder="Search products..." onkeyup="searchFromModal()">
+     <span>&#128269;</span>
+   </div>
+ </div>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+

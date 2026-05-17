@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order – Modern Furnitures</title>
+<link rel="stylesheet" href="style.css?v=3">
+<style>
+.hero {
+  position: relative; height: 300px;
+  background: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop') center/cover;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.hero::after { content: ''; position: absolute; inset: 0; background: rgba(10,40,90,0.55); }
+.hero-text { position: relative; z-index: 2; color: white; }
+.hero-text h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; }
+.hero-text p  { font-size: 18px; opacity: 0.9; }
+
+.wrap { max-width: 680px; margin: 60px auto; padding: 0 24px 80px; }
+
+.search-card {
+  background: white; border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  padding: 36px; text-align: center; margin-bottom: 32px;
+}
+.search-card h2 { font-size: 22px; font-weight: 800; color: #1f2937; margin-bottom: 8px; }
+.search-card p  { color: #6b7280; font-size: 14px; margin-bottom: 24px; }
+.search-row { display: flex; gap: 10px; }
+.search-row input {
+  flex: 1; padding: 13px 16px;
+  border: 1.5px solid #d1d5db; border-radius: 8px;
+  font-size: 14px; outline: none; font-family: Arial, sans-serif;
+}
+.search-row input:focus { border-color: #3b82f6; }
+.search-row button {
+  padding: 13px 24px; background: #3b82f6; color: white;
+  border: none; border-radius: 8px; font-size: 14px;
+  font-weight: bold; cursor: pointer; transition: background 0.2s;
+  white-space: nowrap;
+}
+.search-row button:hover { background: #2563eb; }
+#trackMsg { margin-top: 14px; font-size: 13px; }
+
+/* RESULT */
+#resultCard { display: none; background: white; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); overflow: hidden; }
+.result-header { background: #1f2937; padding: 20px 28px; color: white; }
+.result-header h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.result-header .order-id { font-size: 12px; color: rgba(255,255,255,0.6); }
+.result-body { padding: 24px 28px; }
+
+.status-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.badge {
+  display: inline-block; padding: 6px 16px;
+  border-radius: 20px; font-size: 13px; font-weight: bold;
+}
+.badge.pending   { background: #fef3c7; color: #92400e; }
+.badge.confirmed { background: #dbeafe; color: #1e40af; }
+.badge.shipped   { background: #ede9fe; color: #5b21b6; }
+.badge.delivered { background: #d1fae5; color: #065f46; }
+.badge.cancelled { background: #fee2e2; color: #991b1b; }
+
+/* PROGRESS */
+.progress-steps {
+  display: flex; justify-content: space-between;
+  position: relative; margin-bottom: 32px;
+}
+.progress-steps::before {
+  content: ''; position: absolute; top: 16px; left: 10%; right: 10%;
+  height: 3px; background: #e5e7eb; z-index: 0;
+}
+.step { text-align: center; flex: 1; position: relative; z-index: 1; }
+.step-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #e5e7eb; border: 3px solid #e5e7eb;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 8px; font-size: 14px; color: #9ca3af;
+}
+.step.done .step-dot  { background: #3b82f6; border-color: #3b82f6; color: white; }
+.step.active .step-dot { background: white; border-color: #3b82f6; color: #3b82f6; font-weight: bold; }
+.step-label { font-size: 11px; color: #6b7280; }
+.step.done .step-label, .step.active .step-label { color: #1f2937; font-weight: 600; }
+
+.items-section h4 { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 12px; }
+.order-item {
+  display: flex; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+.order-item:last-child { border-bottom: none; }
+.order-item .name { color: #374151; }
+.order-item .price { font-weight: 600; color: #1f2937; }
+.order-total {
+  display: flex; justify-content: space-between;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 2px solid #1f2937;
+  font-size: 16px; font-weight: 800; color: #1f2937;
+}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+  <h1 class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Modern Furnitures</h1>
+  <div class="search-box"><input type="text" placeholder="Search products..."></div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="categories.html">Categories</a>
+    <a href="cart.html">Cart</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-text">
+    <h1>Track Your Order</h1>
+    <p>Enter your Order ID to see the latest status</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="search-card">
+    <h2>Where is my order?</h2>
+    <p>Enter the <strong>Tracking ID</strong> from your invoice or confirmation email.</p>
+    <div class="search-row">
+      <input type="text" id="orderIdInput" placeholder="Paste your Tracking ID here…">
+      <button onclick="trackOrder()">Track</button>
+    </div>
+    <p id="trackMsg"></p>
+  </div>
+
+  <div id="resultCard">
+    <div class="result-header">
+      <h3 id="resultName">Order</h3>
+      <div class="order-id" id="resultId"></div>
+    </div>
+    <div class="result-body">
+      <div class="status-row">
+        <span style="font-size:14px;color:#6b7280">Current Status:</span>
+        <span class="badge" id="statusBadge"></span>
+      </div>
+
+      <div class="progress-steps" id="progressSteps">
+        <div class="step" id="step-pending">
+          <div class="step-dot">1</div>
+          <div class="step-label">Pending</div>
+        </div>
+        <div class="step" id="step-confirmed">
+          <div class="step-dot">2</div>
+          <div class="step-label">Confirmed</div>
+        </div>
+        <div class="step" id="step-shipped">
+          <div class="step-dot">3</div>
+          <div class="step-label">Shipped</div>
+        </div>
+        <div class="step" id="step-delivered">
+          <div class="step-dot">4</div>
+          <div class="step-label">Delivered</div>
+        </div>
+      </div>
+
+      <div class="items-section">
+        <h4>Order Items</h4>
+        <div id="resultItems"></div>
+        <div class="order-total">
+          <span>Total</span>
+          <span id="resultTotal"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js?v=3"></script>
+<script>
+const API = 'https://modernfurnitures-backend.onrender.com/api';
+const steps = ['pending', 'confirmed', 'shipped', 'delivered'];
+
+async function trackOrder() {
+  const id  = document.getElementById('orderIdInput').value.trim();
+  const msg = document.getElementById('trackMsg');
+  if (!id) { msg.style.color = 'red'; msg.innerText = 'Please enter your Order ID'; return; }
+  msg.style.color = '#6b7280'; msg.innerText = 'Searching...';
+  document.getElementById('resultCard').style.display = 'none';
+  try {
+    const res  = await fetch(`${API}/orders/track/${id}`);
+    const data = await res.json();
+    if (!res.ok) { msg.style.color = 'red'; msg.innerText = data.error; return; }
+    msg.innerText = '';
+    showResult(data);
+  } catch {
+    msg.style.color = 'red'; msg.innerText = 'Server error — make sure backend is running';
+  }
+}
+
+function showResult(o) {
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('resultName').innerText = o.name ? `Order by ${o.name}` : 'Your Order';
+  document.getElementById('resultId').innerText   = `Order ID: ${o.orderId}`;
+
+  const badge = document.getElementById('statusBadge');
+  badge.className = `badge ${o.status}`;
+  badge.innerText = o.status.charAt(0).toUpperCase() + o.status.slice(1);
+
+  const idx = steps.indexOf(o.status);
+  steps.forEach((s, i) => {
+    const el = document.getElementById(`step-${s}`);
+    el.className = 'step' + (i < idx ? ' done' : i === idx ? ' active' : '');
+  });
+
+  document.getElementById('resultItems').innerHTML = o.items.map(i =>
+    `<div class="order-item">
+      <span class="name">${i.name} ×${i.qty}</span>
+      <span class="price">QAR ${(i.price * i.qty).toLocaleString()}</span>
+    </div>`
+  ).join('');
+  document.getElementById('resultTotal').innerText = `QAR ${o.total.toLocaleString()}`;
+}
+
+document.getElementById('orderIdInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') trackOrder();
+});
+
+// Auto-fill from URL ?id=...
+const urlId = new URLSearchParams(window.location.search).get('id');
+if (urlId) { document.getElementById('orderIdInput').value = urlId; trackOrder(); }
+</script>
+</body>
+</html>

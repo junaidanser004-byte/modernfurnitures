@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Products - Modern Furnitures</title>
+ <link rel="stylesheet" href="style.css?v=3">
+ <style>
+   .p-grid {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: center;
+     gap: 24px;
+     padding: 20px 30px 50px;
+     max-width: 1200px;
+     margin: 0 auto;
+   }
+   .p-card {
+     width: 200px;
+     background: white;
+     border-radius: 12px;
+     padding: 14px;
+     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+     display: flex;
+     flex-direction: column;
+     transition: transform 0.2s;
+   }
+   .p-card:hover { transform: translateY(-5px); }
+   .p-card img {
+     width: 100%;
+     height: 150px;
+     object-fit: cover;
+     border-radius: 10px;
+     cursor: pointer;
+   }
+   .p-card h3 {
+     margin: 10px 0 4px;
+     font-size: 15px;
+     color: #1f2937;
+   }
+   .p-card p {
+     color: #6b7280;
+     font-size: 13px;
+     margin-bottom: 10px;
+   }
+   .p-card button {
+     margin-top: auto;
+     background: #3b82f6;
+     color: white;
+     border: none;
+     padding: 9px;
+     border-radius: 6px;
+     cursor: pointer;
+     font-size: 14px;
+     font-weight: 600;
+     width: 100%;
+   }
+   .p-card button:hover { background: #2563eb; }
+ </style>
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+ <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+<h1 class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">Modern Furnitures</h1>
+ <div class="search-box">
+   <input type="text" placeholder="Search products...">
+ </div>
+ <nav>
+   <a href="index.html">Home</a>
+   <a href="products.html">Products</a>
+   <a href="about.html">About</a>
+   <a href="cart.html">Cart</a>
+   <a href="contact.html">Contact</a>
+ </nav>
+</header>
+
+
+<!-- PRODUCT MODAL -->
+<div id="productModal" class="modal" style="display:none;">
+ <div class="product-modal-content">
+   <button class="modal-close-x" onclick="closeProductModal()">&#10005;</button>
+   <div class="product-modal-body">
+     <div class="product-modal-img"><img id="modalImg" src="" alt=""></div>
+     <div class="product-modal-info">
+       <h2 id="modalName"></h2>
+       <p class="modal-price" id="modalPrice"></p>
+       <p class="modal-desc" id="modalDesc"></p>
+       <div id="modalSpecs" class="modal-specs"></div>
+       <button class="btn-add-cart" onclick="addFromModal()">🛒 Add to Cart</button>
+       <p id="modalCartMsg"></p>
+     </div>
+   </div>
+ </div>
+</div>
+
+
+<!-- CART PANEL -->
+<div id="cartPanel" class="cart-panel">
+ <div class="cart-panel-header">
+   <span>SHOPPING CART <span id="cartBadge" class="cart-badge">0</span></span>
+   <button onclick="closeCartPanel()">&#10005;</button>
+ </div>
+ <hr>
+ <div id="cartPanelItems" class="cart-panel-items"></div>
+ <div class="cart-panel-footer">
+   <hr>
+   <div class="cart-subtotal">
+     <span>SUBTOTAL:</span>
+     <span id="cartPanelTotal">QAR 0</span>
+   </div>
+   <button class="cart-checkout-btn" onclick="goCheckoutAll()">CHECKOUT</button>
+ </div>
+</div>
+<div id="cartOverlay" class="cart-overlay" onclick="closeCartPanel()"></div>
+
+
+<!-- PRODUCTS -->
+<section style="background:white; text-align:center;">
+ <h2 class="section-title">ALL PRODUCTS</h2>
+ <div class="p-grid">
+
+
+   <div class="p-card">
+     <img src="https://m.media-amazon.com/images/I/812EhSvR2dL.jpg" alt="Sofa" onclick="viewProduct('Sofa')">
+     <h3>Sofa</h3><p>QAR 5,000</p>
+     <button onclick="viewProduct('Sofa')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://m.media-amazon.com/images/I/51be-GYhI5L._AC_US750_.jpg" alt="Chair" onclick="viewProduct('Chair')">
+     <h3>Chair</h3><p>QAR 2,000</p>
+     <button onclick="viewProduct('Chair')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://cdn.cloudinary.com/dc5ztdzeo/image/upload/c_scale,w_1200/c_crop,g_north_west,x_2,y_16,w_1169,h_877/c_scale,w_1169,h_877/q_auto,f_auto,dpr_2.0/c_limit,w_2000/products/SDTCA02/villa-extension-dining-table-natural-2100mm-2600mm%20(2).jpg" alt="Table" onclick="viewProduct('Table')">
+     <h3>Table</h3><p>QAR 1,500</p>
+     <button onclick="viewProduct('Table')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&auto=format&fit=crop" alt="Bed" onclick="viewProduct('Bed')">
+     <h3>Bed</h3><p>QAR 8,000</p>
+     <button onclick="viewProduct('Bed')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://www.daals.co.uk/cdn/shop/files/BOSF-9381-TAUPE-BOU-5ST-LS_scene1.jpg?v=1762262271&width=2000" alt="L-Shape Sofa" onclick="viewProduct('L-Shape Sofa')">
+     <h3>L-Shape Sofa</h3><p>QAR 9,500</p>
+     <button onclick="viewProduct('L-Shape Sofa')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://images-cdn.ubuy.qa/65a5531ef2d96f188f1d7e36-moumon-glass-wardrobe-closet-with.jpg" alt="Wardrobe" onclick="viewProduct('Wardrobe')">
+     <h3>Wardrobe</h3><p>QAR 6,500</p>
+     <button onclick="viewProduct('Wardrobe')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://images.thdstatic.com/productImages/3e055fe8-c3de-45c9-ad8c-03b156816cf2/svn/rustic-brown-tribesigns-way-to-origin-bookcases-bookshelves-hd-jw0724-hyf-44_600.jpg" alt="Bookshelf" onclick="viewProduct('Bookshelf')">
+     <h3>Bookshelf</h3><p>QAR 1,800</p>
+     <button onclick="viewProduct('Bookshelf')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://cdn.panhomestores.com/cdn-cgi/image/width=354px,quality=70,format=auto,dpr=1/media/catalog/product/0/5/05BUNDLE0012_01_1.JPG" alt="Dining Table" onclick="viewProduct('Dining Table')">
+     <h3>Dining Table</h3><p>QAR 4,500</p>
+     <button onclick="viewProduct('Dining Table')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNkdeuar4L_kX8kfZXWNoQXp4v_rk9aQVMrw&s" alt="Office Chair" onclick="viewProduct('Office Chair')">
+     <h3>Office Chair</h3><p>QAR 2,800</p>
+     <button onclick="viewProduct('Office Chair')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://img5.su-cdn.com/cdn-cgi/image/width=750,height=750/mall/file/2024/11/11/2500x2500_ab1d9a75e9680e8a4a78970e05376bf5.jpg" alt="Coffee Table" onclick="viewProduct('Coffee Table')">
+     <h3>Coffee Table</h3><p>QAR 1,200</p>
+     <button onclick="viewProduct('Coffee Table')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://belleze.com/cdn/shop/articles/A_White_TV_Stand_with_Storage_Drawers_ea8d1cbf-b80c-4d43-ba12-c74445e30b3b.jpg?v=1778317385&width=2048" alt="TV Stand" onclick="viewProduct('TV Stand')">
+     <h3>TV Stand</h3><p>QAR 2,200</p>
+     <button onclick="viewProduct('TV Stand')">View</button>
+   </div>
+
+
+   <div class="p-card">
+     <img src="https://imgres.tailbase.com/rzdimg/prods/800/792741_1.jpg" alt="Dresser" onclick="viewProduct('Dresser')">
+     <h3>Dresser</h3><p>QAR 3,500</p>
+     <button onclick="viewProduct('Dresser')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://www.littletreestore.com/cdn/shop/files/71d-5MLTqoL._AC_SL1500.jpg?v=1718770605&width=1500" alt="Nightstand" onclick="viewProduct('Nightstand')">
+     <h3>Nightstand</h3><p>QAR 850</p>
+     <button onclick="viewProduct('Nightstand')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_G8gU74wFbRfo66d4Dq8oWAw-jedDpHKG9Q&s" alt="Recliner" onclick="viewProduct('Recliner')">
+     <h3>Recliner</h3><p>QAR 3,200</p>
+     <button onclick="viewProduct('Recliner')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://urbanmood.sg/cdn/shop/products/LEX1.jpg?v=1573450563" alt="Study Desk" onclick="viewProduct('Study Desk')">
+     <h3>Study Desk</h3><p>QAR 1,600</p>
+     <button onclick="viewProduct('Study Desk')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://www.rowenandwren.co.uk/cdn/shop/files/240520_Rowen_Wren_AW24Core_S10_ElbertOttoman_RustLinen_073.jpg?v=1726062631" alt="Ottoman" onclick="viewProduct('Ottoman')">
+     <h3>Ottoman</h3><p>QAR 950</p>
+     <button onclick="viewProduct('Ottoman')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://qmax.qa/cdn/shop/files/8_33b22f8a-f155-4ae4-ac9e-f9381edf57fe.png?v=1756346355" alt="Shoe Cabinet" onclick="viewProduct('Shoe Cabinet')">
+     <h3>Shoe Cabinet</h3><p>QAR 1,100</p>
+     <button onclick="viewProduct('Shoe Cabinet')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://images-cdn.ubuy.co.in/63684aed59ee4b2f334b6b54-famapy-display-cabinet-with-glass-doors.jpg" alt="Display Cabinet" onclick="viewProduct('Display Cabinet')">
+     <h3>Display Cabinet</h3><p>QAR 4,200</p>
+     <button onclick="viewProduct('Display Cabinet')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWbZKXOEWUOPuGQOzq9mXvJxp5MHj75elgrQ&s" alt="Bunk Bed" onclick="viewProduct('Bunk Bed')">
+     <h3>Bunk Bed</h3><p>QAR 5,500</p>
+     <button onclick="viewProduct('Bunk Bed')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://www.ikea.com/qa/en/images/products/herrakra-armchair-diseroed-dark-yellow__1213666_pe911202_s5.jpg?f=s" alt="Armchair" onclick="viewProduct('Armchair')">
+     <h3>Armchair</h3><p>QAR 2,400</p>
+     <button onclick="viewProduct('Armchair')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://furniture123.co.uk/Images/780797752MCE005_2_8125575_Supersize.jpg?v=59" alt="Bar Stool" onclick="viewProduct('Bar Stool')">
+     <h3>Bar Stool</h3><p>QAR 680</p>
+     <button onclick="viewProduct('Bar Stool')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://ak1.ostkcdn.com/images/products/is/images/direct/513af267c7375ddcc9e6dec74993193347faf9d7/Narrow-Side-Table-White-Gold-Side-Table-C-Shaped-End-Table-Modern-Bedside-Table-Small-Side-Table-for-Couch-Living-Room.jpg?impolicy=medium" alt="Side Table" onclick="viewProduct('Side Table')">
+     <h3>Side Table</h3><p>QAR 750</p>
+     <button onclick="viewProduct('Side Table')">View</button>
+   </div>
+
+   <div class="p-card">
+     <img src="https://www.humphreymunson.co.uk/app/uploads/2023/10/Humphrey-Munson-_-Handford-Console-Table-_-Portobello-oak-finish1.jpg" alt="Console Table" onclick="viewProduct('Console Table')">
+     <h3>Console Table</h3><p>QAR 1,400</p>
+     <button onclick="viewProduct('Console Table')">View</button>
+   </div>
+
+ </div>
+</section>
+
+
+<script src="script.js?v=3"></script>
+<script>
+ window.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const productname = params.get('product');
+  if (productname) {
+    showproductdetail(productname);
+  }
+ });
+
+ function showProductDetail(name) {
+  const p = allProducts.find(x => x.name === name);
+  if (!p) return;
+
+  document.getElementById('productGrid').style.display = 'none';
+  document.getElementById('ShopMoreWrap').style.display = 'none';
+
+  const detail = document.createElement('div');
+  detail.style.cssText = 'max-width:1100px; margin:30px auto; padding:0 30px; display:grid; grid-template-columns:1fr 1fr; gap:40px;';
+  
+  detail.innerHTML = `
+    <div>
+      <p style="font-size:13px; color:#6b7280; margin-bottom:20px;">
+        <a href="index.html">Home</a> / 
+        <a href="products.html">Products</a> / ${name}
+      </p>
+      <img src="${p.img}" style="width:100%; border-radius:12px; object-fit:cover;">
+    </div>
+    <div>
+      <h2 style="font-size:28px; font-weight:800; color:#1f2937;">${name}</h2>
+      <p style="font-size:22px; font-weight:700; color:#3b82f6; margin:10px 0;">
+        ${p.price}
+      </p>
+      <p style="color:#6b7280; line-height:1.7;">${p.desc}</p>
+      <table style="width:100%; margin-top:20px; border-collapse:collapse;">
+        ${Object.entries(p.specs).map(([k,v]) => `
+          <tr style="border-bottom:1px solid #f3f4f6;">
+            <td style="padding:10px 0; color:#6b7280; font-size:14px;">${k}</td>
+            <td style="padding:10px 0; text-align:right; font-weight:600; font-size:14px;">${v}</td>
+          </tr>`).join('')}
+      </table>
+      <button onclick="addToCartFromDetail('${name}', ${p.priceNum})" 
+        style="width:100%; padding:16px; background:#3b82f6; color:white; border:none; border-radius:8px; font-size:16px; font-weight:700; cursor:pointer; margin-top:24px;">
+        🛒 Add to Cart
+      </button>
+    </div>
+  `;
+  
+  document.getElementById('productsSection').appendChild(detail);
+}
+
+function addToCartFromDetail(name, price) {
+  addtocart(name, price);
+  alert(name + ' added to cart ✔');
+}
+
+</script>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+ <a href="#" onclick="toggleBottomSearch()">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+   </svg>
+   Search
+ </a>
+ <a href="#" onclick="openCartPanel()">
+   <div class="bn-cart-wrap">
+     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+     </svg>
+     <span class="bn-badge" id="bnCartBadge">0</span>
+   </div>
+   Cart
+ </a>
+ <a href="categories.html">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+   </svg>
+   Categories
+ </a>
+</div>
+
+
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="search-modal-overlay" onclick="closeSearchModal(event)">
+ <div class="search-modal-box">
+   <div class="search-modal-header">
+     <span>TYPE TO SEARCH</span>
+     <button onclick="toggleBottomSearch()">&#10005;</button>
+   </div>
+   <div class="search-modal-input">
+     <input type="text" id="searchModalInput" placeholder="Search products..." onkeyup="searchFromModal()">
+     <span>&#128269;</span>
+   </div>
+ </div>
+</div>
+
+
+</body>
+</html>
+

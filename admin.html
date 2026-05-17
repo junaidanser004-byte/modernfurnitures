@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>Admin Panel – Modern Furnitures</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css?v=3">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-bg-slide active" style="background-image:url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1600&auto=format&fit=crop')"></div>
+  <div class="login-bg-slide" style="background-image:url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1600&auto=format&fit=crop')"></div>
+  <div class="login-bg-slide" style="background-image:url('https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1600&auto=format&fit=crop')"></div>
+  <div class="login-bg-overlay"></div>
+  <div class="login-wrap">
+    <div class="login-logo">
+      <h1>Modern Furnitures</h1>
+      <p>Admin Backend Panel</p>
+    </div>
+    <div class="login-card" id="loginForm">
+      <label class="field-label">Email</label>
+      <input class="field-input" type="email" id="adminEmail" placeholder="Store email address" onkeydown="if(event.key==='Enter') document.getElementById('adminPass').focus()">
+      <label class="field-label">Password</label>
+      <div class="pass-wrap" style="margin-bottom:20px;">
+        <input class="field-input" type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter') doLogin()">
+        <button class="eye-btn" type="button" onclick="toggleEye('adminPass', this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+      </div>
+      <button class="btn-login" onclick="doLogin()">Sign In</button>
+      <p id="loginMsg"></p>
+      <p style="text-align:center;margin-top:16px;font-size:12px;color:#475569;">
+        No account yet? <a href="#" onclick="showSetup()" style="color:#6366f1;">Create admin account</a>
+      </p>
+    </div>
+
+    <!-- SETUP FORM -->
+    <div class="login-card" id="setupForm" style="display:none;">
+      <label class="field-label">Your Name</label>
+      <input class="field-input" type="text" id="setupName" placeholder="e.g. Mohammed" onkeydown="if(event.key==='Enter') document.getElementById('setupEmail').focus()">
+      <label class="field-label">Store Email</label>
+      <input class="field-input" type="email" id="setupEmail" placeholder="e.g. info@modernfurnitures.qa" onkeydown="if(event.key==='Enter') document.getElementById('setupPass').focus()">
+      <label class="field-label">Password</label>
+      <div class="pass-wrap" style="margin-bottom:20px;">
+        <input class="field-input" type="password" id="setupPass" placeholder="Choose a strong password" onkeydown="if(event.key==='Enter') doSetup()">
+        <button class="eye-btn" type="button" onclick="toggleEye('setupPass', this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+      </div>
+      <button class="btn-login" onclick="doSetup()">Create Admin Account</button>
+      <p id="setupMsg"></p>
+      <p style="text-align:center;margin-top:16px;font-size:12px;color:#475569;">
+        Already have account? <a href="#" onclick="showLogin()" style="color:#6366f1;">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-brand" style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h2 onclick="window.location.href='index.html'" style="cursor:pointer;">Modern Furnitures</h2>
+        <p>Admin Panel</p>
+      </div>
+      <button class="sidebar-close-btn" onclick="closeSidebar()">&#10005;</button>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+      <a class="nav-item active" onclick="goPage('dashboard')"><span class="icon">📊</span> Dashboard</a>
+      <a class="nav-item" onclick="goPage('orders')"><span class="icon">📦</span> Orders <span class="nav-badge" id="sidebarPending" style="display:none"></span></a>
+      <a class="nav-item" onclick="goPage('users')"><span class="icon">👥</span> Users</a>
+      <a class="nav-item" onclick="goPage('neworders')"><span class="icon">🔔</span> New Orders <span class="nav-badge" id="newOrdersBadge" style="display:none"></span></a>
+      <a class="nav-item" onclick="goPage('update')"><span class="icon">✏️</span> Update Orders <span class="nav-badge" id="sidebarPending2" style="display:none"></span></a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Store</div>
+      <a class="nav-item" href="index.html" target="_blank"><span class="icon">🏠</span> View Store</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-info" onclick="goPage('profile')" style="cursor:pointer;" title="View Profile">
+        <div class="admin-avatar" style="font-size:11px;" id="sidebarAvatar">MF</div>
+        <div style="flex:1;">
+          <div class="admin-name" id="sidebarName">Admin</div>
+          <div class="admin-role" id="sidebarEmail">—</div>
+        </div>
+        <span style="color:#475569;font-size:11px;">›</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+      </div>
+      <div class="topbar-right"><span><span class="status-dot"></span> Online</span></div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">Total Orders</div><div class="stat-icon-wrap" style="background:rgba(99,102,241,0.15);">📦</div></div>
+            <div class="stat-value" id="st-orders">—</div><div class="stat-sub">All time orders</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">Total Revenue</div><div class="stat-icon-wrap" style="background:rgba(34,197,94,0.15);">💰</div></div>
+            <div class="stat-value" id="st-revenue">—</div><div class="stat-sub">QAR earned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">Registered Users</div><div class="stat-icon-wrap" style="background:rgba(59,130,246,0.15);">👤</div></div>
+            <div class="stat-value" id="st-users">—</div><div class="stat-sub">Total accounts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-label">Pending Orders</div><div class="stat-icon-wrap" style="background:rgba(234,179,8,0.15);">⏳</div></div>
+            <div class="stat-value" id="st-pending">—</div><div class="stat-sub">Need attention</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-head-title">Recent Orders</div><button class="btn-refresh" onclick="loadOrders()">↻ Refresh</button></div>
+          <div class="tbl-wrap"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="recentBody"><tr class="tbl-empty"><td colspan="6">Loading…</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="page" id="page-orders">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <button class="tab-btn active" id="tab-all" onclick="setTab('all')">All</button>
+          <button class="tab-btn" id="tab-pending" onclick="setTab('pending')">⏳ Pending <span class="tab-count" id="cnt-pending"></span></button>
+          <button class="tab-btn" id="tab-confirmed" onclick="setTab('confirmed')">✅ Confirmed <span class="tab-count" id="cnt-confirmed"></span></button>
+          <button class="tab-btn" id="tab-shipped" onclick="setTab('shipped')">🚚 Shipped <span class="tab-count" id="cnt-shipped"></span></button>
+          <button class="tab-btn" id="tab-delivered" onclick="setTab('delivered')">📦 Delivered <span class="tab-count" id="cnt-delivered"></span></button>
+          <button class="tab-btn" id="tab-cancelled" onclick="setTab('cancelled')">❌ Cancelled <span class="tab-count" id="cnt-cancelled"></span></button>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-head-title" id="ordersTabTitle">All Orders</div>
+            <div class="panel-head-right">
+              <input class="search-field" type="text" id="orderSearch" placeholder="Search orders…" oninput="filterOrders()">
+              <button class="btn-refresh" onclick="loadOrders()">↻ Refresh</button>
+            </div>
+          </div>
+          <div class="tbl-wrap"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Update</th></tr></thead><tbody id="ordersBody"><tr class="tbl-empty"><td colspan="8">Loading…</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="page" id="page-users">
+        <div class="panel users-table">
+          <div class="panel-head"><div class="panel-head-title">Registered Users</div><button class="btn-refresh" onclick="loadUsers()">↻ Refresh</button></div>
+          <div class="tbl-wrap"><table><thead><tr><th>User</th><th>Email</th><th>Joined</th><th>Orders</th></tr></thead><tbody id="usersBody"><tr class="tbl-empty"><td colspan="4">Loading…</td></tr></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- NEW ORDERS -->
+      <div class="page" id="page-neworders">
+        <div class="no-refresh-bar">
+          <div><span class="pulse"></span><span id="noLiveText">Auto-refreshing every 30s</span></div>
+          <button class="btn-refresh" onclick="loadNewOrders()">↻ Refresh Now</button>
+        </div>
+        <div id="newOrdersGrid" style="display:flex;flex-direction:column;gap:14px;"><div style="text-align:center;padding:48px;color:#475569;">Loading…</div></div>
+      </div>
+
+      <!-- UPDATE ORDERS -->
+      <div class="page" id="page-update">
+        <div class="update-grid" id="updateGrid"><div style="text-align:center;padding:48px;color:#475569;">Loading orders…</div></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="page" id="page-profile">
+        <div style="max-width:600px;">
+          <div class="panel" style="margin-bottom:20px;">
+            <div class="panel-head"><div class="panel-head-title">🛋️ Store Information</div></div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <div style="width:60px;height:60px;background:#6366f1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">🛋️</div>
+                <div><div style="font-size:18px;font-weight:700;color:#f1f5f9;">Modern Furnitures</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Doha, Qatar</div></div>
+              </div>
+              <div style="border-top:1px solid #334155;padding-top:16px;display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:32px;background:#334155;border-radius:8px;display:flex;align-items:center;justify-content:center;">📞</span><div><div style="font-size:11px;color:#64748b;">Phone</div><div style="font-size:14px;color:#f1f5f9;font-weight:500;">+974 22334455</div></div></div>
+                <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:32px;background:#334155;border-radius:8px;display:flex;align-items:center;justify-content:center;">✉️</span><div><div style="font-size:11px;color:#64748b;">Email</div><div style="font-size:14px;color:#f1f5f9;font-weight:500;">info@modernfurnitures.qa</div></div></div>
+                <div style="display:flex;align-items:center;gap:12px;"><span style="width:32px;height:32px;background:#334155;border-radius:8px;display:flex;align-items:center;justify-content:center;">📍</span><div><div style="font-size:11px;color:#64748b;">Address</div><div style="font-size:14px;color:#f1f5f9;font-weight:500;">Doha, Qatar</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><div class="panel-head-title">👤 Admin Account</div></div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <div id="profileAvatar" style="width:52px;height:52px;background:#6366f1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;flex-shrink:0;">MF</div>
+                <div><div id="profileName" style="font-size:16px;font-weight:700;color:#f1f5f9;">Admin</div><div id="profileEmail" style="font-size:12px;color:#64748b;">—</div></div>
+              </div>
+              <div style="border-top:1px solid #334155;padding-top:16px;">
+                <button class="btn-logout" onclick="doLogout()" style="width:auto;padding:10px 24px;">Sign Out</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:20px;">
+            <div class="panel-head"><div class="panel-head-title">➕ Create New Admin</div></div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:14px;">
+              <input class="search-field" type="text" id="newAdminName" placeholder="Name" style="width:100%;padding:11px 14px;font-size:14px;">
+              <input class="search-field" type="email" id="newAdminEmail" placeholder="Email" style="width:100%;padding:11px 14px;font-size:14px;">
+              <input class="search-field" type="password" id="newAdminPass" placeholder="Password" style="width:100%;padding:11px 14px;font-size:14px;">
+              <button class="btn-refresh" onclick="createNewAdmin()" style="background:#6366f1;color:white;padding:11px;font-size:14px;font-weight:600;">Create Admin</button>
+              <p id="createAdminMsg" style="font-size:13px;text-align:center;min-height:18px;"></p>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:20px;border:1px solid #7f1d1d;">
+            <div class="panel-head" style="background:#1c0a0a;border-bottom:1px solid #7f1d1d;">
+              <div class="panel-head-title" style="color:#f87171;">⚠️ Danger Zone</div>
+            </div>
+            <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+              <p style="font-size:13px;color:#94a3b8;margin:0;">These actions are <strong style="color:#f87171;">permanent and cannot be undone</strong>. All deleted data will be lost forever.</p>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#1e1e2e;border-radius:8px;border:1px solid #334155;">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#f1f5f9;">Clear All Orders</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px;">Delete every order from the database</div>
+                </div>
+                <button onclick="clearOrders()" style="background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Clear Orders</button>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#1e1e2e;border-radius:8px;border:1px solid #334155;">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#f1f5f9;">Clear All Users</div>
+                  <div style="font-size:12px;color:#64748b;margin-top:2px;">Delete all registered customer accounts</div>
+                </div>
+                <button onclick="clearUsers()" style="background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Clear Users</button>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#1c0a0a;border-radius:8px;border:1px solid #7f1d1d;">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:#fca5a5;">Clear All Store Data</div>
+                  <div style="font-size:12px;color:#9ca3af;margin-top:2px;">Delete ALL orders and ALL users at once</div>
+                </div>
+                <button onclick="clearAllData()" style="background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Clear Everything</button>
+              </div>
+
+              <p id="dangerMsg" style="font-size:13px;text-align:center;min-height:18px;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="admin.js?v=3"></script>
+</body>
+</html>

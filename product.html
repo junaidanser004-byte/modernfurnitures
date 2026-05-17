@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Detail - Modern Furnitures</title>
+<link rel="stylesheet" href="style.css?v=3">
+<style>
+ .product-detail-wrap {
+   max-width: 1100px;
+   margin: 30px auto;
+   padding: 0 30px 60px;
+ }
+ .breadcrumb {
+   font-size: 13px;
+   color: #6b7280;
+   margin-bottom: 24px;
+ }
+ .breadcrumb a {
+   color: #3b82f6;
+   text-decoration: none;
+ }
+ .breadcrumb a:hover { text-decoration: underline; }
+ .breadcrumb span { margin: 0 6px; }
+
+
+ .product-layout {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 50px;
+   align-items: start;
+ }
+
+
+ /* LEFT - Image */
+ .product-img-wrap img {
+   width: 100%;
+   border-radius: 14px;
+   object-fit: cover;
+   max-height: 480px;
+   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+ }
+
+
+ /* RIGHT - Info */
+ .product-info h1 {
+   font-size: 28px;
+   font-weight: 800;
+   color: #1f2937;
+   margin-bottom: 8px;
+ }
+ .product-price {
+   font-size: 22px;
+   font-weight: 700;
+   color: #3b82f6;
+   margin-bottom: 14px;
+ }
+ .product-desc {
+   font-size: 14px;
+   color: #6b7280;
+   line-height: 1.8;
+   margin-bottom: 24px;
+ }
+ .product-specs {
+   width: 100%;
+   border-collapse: collapse;
+   margin-bottom: 28px;
+ }
+ .product-specs tr {
+   border-bottom: 1px solid #f3f4f6;
+ }
+ .product-specs td {
+   padding: 11px 4px;
+   font-size: 14px;
+ }
+ .product-specs td:first-child {
+   color: #6b7280;
+   font-weight: 500;
+ }
+ .product-specs td:last-child {
+   text-align: right;
+   font-weight: 600;
+   color: #1f2937;
+ }
+
+
+ .btn-add-cart {
+   width: 100%;
+   padding: 16px;
+   background: #3b82f6;
+   color: white;
+   border: none;
+   border-radius: 10px;
+   font-size: 16px;
+   font-weight: 700;
+   cursor: pointer;
+   transition: background 0.2s;
+ }
+ .btn-add-cart:hover { background: #2563eb; }
+
+
+ .cart-success-msg {
+   color: #10b981;
+   font-weight: 600;
+   font-size: 14px;
+   margin-top: 10px;
+   text-align: center;
+ }
+
+
+ .prev-next-nav {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 24px;
+   font-size: 13px;
+ }
+ .prev-next-nav a {
+   color: #3b82f6;
+   text-decoration: none;
+   font-weight: 600;
+ }
+ .prev-next-nav a:hover { text-decoration: underline; }
+
+
+ @media(max-width: 768px) {
+   .product-layout {
+     grid-template-columns: 1fr;
+     gap: 24px;
+   }
+   .product-detail-wrap { padding: 0 16px 60px; }
+ }
+</style>
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+ <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+ <h1 class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Modern Furnitures</h1>
+ <div class="search-box">
+   <input type="text" placeholder="Search products...">
+ </div>
+ <nav>
+   <a href="index.html">Home</a>
+   <a href="products.html">Products</a>
+   <a href="about.html">About</a>
+   <a href="categories.html">Categories</a>
+   <a href="contact.html">Contact</a>
+   <a href="#" onclick="openCartPanel()">Cart (<span id="cartCount">0</span>)</a>
+ </nav>
+</header>
+
+
+<!-- PRODUCT DETAIL -->
+<div class="product-detail-wrap">
+
+
+ <!-- Breadcrumb -->
+ <div class="breadcrumb">
+   <a href="index.html">Home</a>
+   <span>/</span>
+   <a href="products.html">Products</a>
+   <span>/</span>
+   <span id="breadcrumbName">Product</span>
+ </div>
+
+
+ <!-- Prev / Next -->
+ <div class="prev-next-nav">
+   <a href="#" onclick="navigateProduct(-1)">&#8592; PREVIOUS</a>
+   <a href="#" onclick="navigateProduct(1)">NEXT &#8594;</a>
+ </div>
+
+
+ <!-- Layout -->
+ <div class="product-layout">
+   <!-- Left: Image -->
+   <div class="product-img-wrap">
+     <img id="detailImg" src="" alt="">
+   </div>
+
+
+   <!-- Right: Info -->
+   <div class="product-info">
+     <h1 id="detailName"></h1>
+     <div class="product-price" id="detailPrice"></div>
+     <p class="product-desc" id="detailDesc"></p>
+     <table class="product-specs" id="detailSpecs"></table>
+     <button class="btn-add-cart" onclick="addToCartDetail()">&#128722; Add to Cart</button>
+     <p class="cart-success-msg" id="cartMsg"></p>
+   </div>
+ </div>
+
+
+</div>
+
+
+<!-- CART PANEL -->
+<div id="cartPanel" class="cart-panel">
+ <div class="cart-panel-header">
+   <span>SHOPPING CART <span id="cartBadge" class="cart-badge">0</span></span>
+   <button onclick="closeCartPanel()">&#10005;</button>
+ </div>
+ <hr>
+ <div id="cartPanelItems" class="cart-panel-items"></div>
+ <div class="cart-panel-footer">
+   <hr>
+   <div class="cart-subtotal">
+     <span>SUBTOTAL:</span>
+     <span id="cartPanelTotal">QAR 0</span>
+   </div>
+   <div class="cart-view-link" onclick="window.location.href='cart.html'">VIEW CART</div>
+   <button class="cart-checkout-btn" onclick="goCheckoutAll()">CHECKOUT</button>
+ </div>
+</div>
+<div id="cartOverlay" class="cart-overlay" onclick="closeCartPanel()"></div>
+
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+ <a href="#" onclick="toggleBottomSearch()">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+   </svg>
+   Search
+ </a>
+ <a href="#" onclick="openCartPanel()">
+   <div class="bn-cart-wrap">
+     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+     </svg>
+     <span class="bn-badge" id="bnCartBadge">0</span>
+   </div>
+   Cart
+ </a>
+ <a href="categories.html">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+   </svg>
+   Categories
+ </a>
+</div>
+
+
+<script src="script.js?v=3"></script>
+<script>
+const allProductsData = {
+ 'Sofa': {
+   img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2hTBm9THYwxt9WwYYNAayzIMs_-UmRaGSd6qLqoyUqQrPhokI',
+   price: 5000,
+   description: 'A luxurious modern sofa crafted for comfort and elegance. Perfect centerpiece for any living room.',
+   specs: { Material: 'Premium Velvet Fabric', Dimensions: '220 x 90 x 85 cm', Color: 'Beige / Ivory', Seating: '3-Seater', Warranty: '2 Years' }
+ },
+ 'Chair': {
+   img: 'data:image/jpeg;base64,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',
+   price: 2000,
+   description: 'Elegant accent chair with sculpted shell back and gold-finish legs.',
+   specs: { Material: 'Boucle Fabric & Gold Metal', Dimensions: '75 x 80 x 90 cm', Color: 'Cream / Gold', Seating: '1-Seater', Warranty: '1 Year' }
+ },
+ 'Table': {
+   img: 'data:image/jpeg;base64,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',
+   price: 1500,
+   description: 'Minimalist solid wood coffee table with a warm natural finish.',
+   specs: { Material: 'Solid Oak Wood', Dimensions: '120 x 60 x 45 cm', Color: 'Portobello Oak', Style: 'Scandinavian', Warranty: '1 Year' }
+ },
+ 'Bed': {
+   img: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&auto=format&fit=crop',
+   price: 8000,
+   description: 'King-size upholstered bed with a tufted headboard and solid wood frame.',
+   specs: { Material: 'Linen & Solid Wood', Dimensions: '210 x 200 x 140 cm', Size: 'King', Color: 'Light Grey', Warranty: '3 Years' }
+ },
+ 'L-Shape Sofa': {
+   img: 'https://www.daals.co.uk/cdn/shop/files/BOSF-9381-TAUPE-BOU-5ST-LS_scene1.jpg?v=1762262271&width=2000',
+   price: 9500,
+   description: 'Spacious L-shape sectional sofa with deep cushioning.',
+   specs: { Material: 'High-Density Foam & Fabric', Dimensions: '300 x 200 x 85 cm', Color: 'Taupe / Beige', Seating: '6-Seater', Warranty: '2 Years' }
+ },
+ 'Wardrobe': {
+   img: 'https://images-cdn.ubuy.qa/65a5531ef2d96f188f1d7e36-moumon-glass-wardrobe-closet-with.jpg',
+   price: 6500,
+   description: 'Spacious 4-door wardrobe with mirrored panels.',
+   specs: { Material: 'Engineered Wood & Mirror', Dimensions: '200 x 60 x 220 cm', Doors: '4-Door', Color: 'White / Glass', Warranty: '2 Years' }
+ },
+ 'Bookshelf': {
+   img: 'https://images.thdstatic.com/productImages/3e055fe8-c3de-45c9-ad8c-03b156816cf2/svn/rustic-brown-tribesigns-way-to-origin-bookcases-bookshelves-hd-jw0724-hyf-44_600.jpg',
+   price: 1800,
+   description: 'Classic 5-tier bookshelf with an open design.',
+   specs: { Material: 'Solid Pine Wood', Dimensions: '80 x 30 x 180 cm', Shelves: '5 Tiers', Color: 'Rustic Brown', Warranty: '1 Year' }
+ },
+ 'Dining Table': {
+   img: 'https://cdn.panhomestores.com/cdn-cgi/image/width=354px,quality=70,format=auto,dpr=1/media/catalog/product/0/5/05BUNDLE0012_01_1.JPG',
+   price: 4500,
+   description: 'Modern dining table with a matte black base and marble-look top.',
+   specs: { Material: 'MDF & Steel', Dimensions: '180 x 90 x 76 cm', Seating: '6 Persons', Color: 'Marble / Brown', Warranty: '2 Years' }
+ },
+ 'Office Chair': {
+   img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNkdeuar4L_kX8kfZXWNoQXp4v_rk9aQVMrw&s',
+   price: 2800,
+   description: 'Ergonomic office chair with lumbar support and breathable mesh back.',
+   specs: { Material: 'Mesh & Nylon', Dimensions: '65 x 65 x 115 cm', Adjustable: 'Height & Armrest', Color: 'White / Grey', Warranty: '2 Years' }
+ },
+ 'Coffee Table': {
+   img: 'https://img5.su-cdn.com/cdn-cgi/image/width=750,height=750/mall/file/2024/11/11/2500x2500_ab1d9a75e9680e8a4a78970e05376bf5.jpg',
+   price: 1200,
+   description: 'Compact round coffee table with a sleek design.',
+   specs: { Material: 'Tempered Glass & Steel', Dimensions: '80 x 80 x 42 cm', Shape: 'Square', Color: 'Clear / Gold', Warranty: '1 Year' }
+ },
+ 'TV Stand': {
+   img: 'https://belleze.com/cdn/shop/articles/A_White_TV_Stand_with_Storage_Drawers_ea8d1cbf-b80c-4d43-ba12-c74445e30b3b.jpg?v=1778317385&width=2048',
+   price: 2200,
+   description: 'Modern TV stand with open shelves and cable management.',
+   specs: { Material: 'Engineered Wood', Dimensions: '160 x 40 x 55 cm', 'TV Fit': 'Up to 75"', Color: 'White', Warranty: '1 Year' }
+ },
+ 'Dresser': {
+   img: 'https://imgres.tailbase.com/rzdimg/prods/800/792741_1.jpg',
+   price: 3500,
+   description: 'Contemporary 6-drawer dresser with smooth-glide drawers.',
+   specs: { Material: 'Solid Wood & MDF', Dimensions: '100 x 45 x 120 cm', Drawers: '6 Drawers', Color: 'White / Oak', Warranty: '2 Years' }
+ },
+ 'Nightstand': {
+   img: 'https://www.littletreestore.com/cdn/shop/files/71d-5MLTqoL._AC_SL1500.jpg?v=1718770605&width=1500',
+   price: 850,
+   description: 'Elegant bedside nightstand with 2 drawers and open shelf for easy access.',
+   specs: { Material: 'Solid Wood', Dimensions: '45 x 40 x 55 cm', Drawers: '2 Drawers', Color: 'White', Warranty: '1 Year' }
+ },
+ 'Recliner': {
+   img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_G8gU74wFbRfo66d4Dq8oWAw-jedDpHKG9Q&s',
+   price: 3200,
+   description: 'Luxury recliner chair with adjustable backrest and footrest for ultimate comfort.',
+   specs: { Material: 'Premium Leather', Dimensions: '85 x 90 x 105 cm', Reclining: '150° Adjustable', Color: 'Cognac Brown', Warranty: '2 Years' }
+ },
+ 'Study Desk': {
+   img: 'https://urbanmood.sg/cdn/shop/products/LEX1.jpg?v=1573450563',
+   price: 1600,
+   description: 'Modern study desk with built-in storage drawers and cable management.',
+   specs: { Material: 'Engineered Wood', Dimensions: '140 x 60 x 75 cm', Storage: '2 Drawers', Color: 'White / Oak', Warranty: '1 Year' }
+ },
+ 'Ottoman': {
+   img: 'https://www.rowenandwren.co.uk/cdn/shop/files/240520_Rowen_Wren_AW24Core_S10_ElbertOttoman_RustLinen_073.jpg?v=1726062631',
+   price: 950,
+   description: 'Versatile upholstered ottoman — use as a footrest, extra seating, or coffee table.',
+   specs: { Material: 'Velvet Fabric & Wood', Dimensions: '80 x 80 x 42 cm', Style: 'Modern', Color: 'Rust / Linen', Warranty: '1 Year' }
+ },
+ 'Shoe Cabinet': {
+   img: 'https://qmax.qa/cdn/shop/files/8_33b22f8a-f155-4ae4-ac9e-f9381edf57fe.png?v=1756346355',
+   price: 1100,
+   description: 'Sleek shoe cabinet with flip-door compartments to keep your entryway tidy.',
+   specs: { Material: 'Engineered Wood', Dimensions: '90 x 30 x 100 cm', Capacity: '12 Pairs', Color: 'White', Warranty: '1 Year' }
+ },
+ 'Display Cabinet': {
+   img: 'https://images-cdn.ubuy.co.in/63684aed59ee4b2f334b6b54-famapy-display-cabinet-with-glass-doors.jpg',
+   price: 4200,
+   description: 'Elegant glass display cabinet with LED lighting to showcase your collectibles.',
+   specs: { Material: 'Wood & Tempered Glass', Dimensions: '90 x 40 x 190 cm', Lighting: 'Built-in LED', Color: 'White / Gold', Warranty: '2 Years' }
+ },
+ 'Bunk Bed': {
+   img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWbZKXOEWUOPuGQOzq9mXvJxp5MHj75elgrQ&s',
+   price: 5500,
+   description: 'Sturdy twin bunk bed with safety rails and integrated ladder, ideal for kids.',
+   specs: { Material: 'Solid Pine Wood', Dimensions: '200 x 100 x 165 cm', Size: 'Twin over Twin', Color: 'Natural Pine', Warranty: '3 Years' }
+ },
+ 'Armchair': {
+   img: 'https://www.ikea.com/qa/en/images/products/herrakra-armchair-diseroed-dark-yellow__1213666_pe911202_s5.jpg?f=s',
+   price: 2400,
+   description: 'Comfortable accent armchair with cushioned seat and stylish tapered legs.',
+   specs: { Material: 'Linen Fabric & Beech Wood', Dimensions: '80 x 82 x 88 cm', Style: 'Modern', Color: 'Dark Yellow', Warranty: '2 Years' }
+ },
+ 'Bar Stool': {
+   img: 'https://furniture123.co.uk/Images/780797752MCE005_2_8125575_Supersize.jpg?v=59',
+   price: 680,
+   description: 'Adjustable height bar stool with footrest, ideal for kitchen counters and bars.',
+   specs: { Material: 'Metal & PU Leather', Dimensions: '40 x 40 x 60–80 cm', Height: 'Adjustable', Color: 'Grey / Black', Warranty: '1 Year' }
+ },
+ 'Side Table': {
+   img: 'https://ak1.ostkcdn.com/images/products/is/images/direct/513af267c7375ddcc9e6dec74993193347faf9d7/Narrow-Side-Table-White-Gold-Side-Table-C-Shaped-End-Table-Modern-Bedside-Table-Small-Side-Table-for-Couch-Living-Room.jpg?impolicy=medium',
+   price: 750,
+   description: 'Compact round side table with marble top and gold metal legs.',
+   specs: { Material: 'Marble & Gold Metal', Dimensions: '45 x 45 x 55 cm', Shape: 'C-Shaped', Color: 'White / Gold', Warranty: '1 Year' }
+ },
+ 'Console Table': {
+   img: 'https://www.humphreymunson.co.uk/app/uploads/2023/10/Humphrey-Munson-_-Handford-Console-Table-_-Portobello-oak-finish1.jpg',
+   price: 1400,
+   description: 'Slim console table perfect for entryways and hallways with a lower shelf.',
+   specs: { Material: 'Solid Oak Wood', Dimensions: '120 x 35 x 80 cm', Shelves: '1 Lower Shelf', Color: 'Portobello Oak', Warranty: '1 Year' }
+ }
+};
+
+const productKeys = Object.keys(allProductsData);
+let currentProductName = '';
+
+
+window.addEventListener('DOMContentLoaded', function() {
+ loadCart();
+ const params = new URLSearchParams(window.location.search);
+ const name = params.get('product') || params.get('name');
+ if (name && allProductsData[name]) {
+ currentProductName = name;
+ renderProduct(name);
+} else {
+ document.querySelector('.product-detail-wrap').innerHTML = '...Product not found...';
+}
+});
+
+
+function renderProduct(name) {
+ const p = allProductsData[name];
+ document.title = name + ' - Modern Furnitures';
+ document.getElementById('breadcrumbName').innerText = name;
+ document.getElementById('detailImg').src = p.img;
+ document.getElementById('detailImg').alt = name;
+ document.getElementById('detailName').innerText = name;
+ document.getElementById('detailPrice').innerText = 'QAR ' + p.price.toLocaleString();
+ document.getElementById('detailDesc').innerText = p.description;
+ document.getElementById('cartMsg').innerText = '';
+
+
+ let specsHtml = '';
+ for (let [key, val] of Object.entries(p.specs)) {
+   specsHtml += `<tr><td>${key}</td><td>${val}</td></tr>`;
+ }
+ document.getElementById('detailSpecs').innerHTML = specsHtml;
+}
+
+
+function addToCartDetail() {
+ const p = allProductsData[currentProductName];
+ if (!p) return;
+ addtocart(currentProductName, p.price);
+ const msg = document.getElementById('cartMsg');
+ msg.innerText = currentProductName + ' added to cart ✔';
+ setTimeout(() => { msg.innerText = ''; }, 3000);
+}
+
+
+function navigateProduct(direction) {
+ const idx = productKeys.indexOf(currentProductName);
+ let newIdx = idx + direction;
+ if (newIdx < 0) newIdx = productKeys.length - 1;
+ if (newIdx >= productKeys.length) newIdx = 0;
+ currentProductName = productKeys[newIdx];
+ window.history.pushState({}, '', 'product.html?product=' + encodeURIComponent(currentProductName));
+ renderProduct(currentProductName);
+}
+</script>
+</body>
+</html>
+

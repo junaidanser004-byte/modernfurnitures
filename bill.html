@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice - Modern Furnitures</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1f2937;
+    --blue: #3b82f6;
+    --green: #10b981;
+    --gray: #6b7280;
+    --light: #f9fafb;
+    --border: #e5e7eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+    min-height: 100vh;
+    padding: 30px 16px 60px;
+  }
+
+  /* ── SUCCESS BANNER ── */
+  .success-banner {
+    max-width: 780px;
+    margin: 0 auto 28px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 16px;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: white;
+    box-shadow: 0 8px 32px rgba(16,185,129,0.3);
+    animation: slideDown 0.5s ease;
+  }
+  .success-banner .check-icon {
+    width: 48px; height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .success-banner h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .success-banner p { font-size: 13px; opacity: 0.9; }
+
+  @keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+
+  /* ── INVOICE CARD ── */
+  .invoice-card {
+    max-width: 780px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+    overflow: hidden;
+    animation: fadeUp 0.6s ease 0.15s both;
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* ── HEADER ── */
+  .invoice-header {
+    background: var(--dark);
+    padding: 32px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: white;
+    letter-spacing: 0.5px;
+  }
+  .brand-tagline { color: #9ca3af; font-size: 12px; margin-top: 4px; }
+
+  .invoice-meta { text-align: right; }
+  .invoice-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--blue);
+    letter-spacing: 1px;
+  }
+  .invoice-id { color: #0363f4; font-size: 13px; margin-top: 6px; }
+  .invoice-date { color: #9ca3af; font-size: 12px; margin-top: 3px; }
+
+  /* ── STATUS BADGE ── */
+  .status-bar {
+    background: var(--light);
+    padding: 10px 36px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* ── BODY ── */
+  .invoice-body { padding: 32px 36px; }
+
+  /* ── TWO-COL INFO ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .info-box {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .info-box-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .info-row { font-size: 13px; color: var(--dark); margin-bottom: 4px; line-height: 1.6; }
+  .info-row span { color: var(--gray); }
+
+  /* ── ITEMS TABLE ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .items-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .items-table th {
+    background: var(--dark);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 10px 14px;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  .items-table th:last-child { text-align: right; }
+  .items-table td {
+    padding: 14px;
+    font-size: 13px;
+    color: var(--dark);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .items-table td:last-child { text-align: right; font-weight: 600; }
+  .items-table tr:last-child td { border-bottom: none; }
+  .item-name { font-weight: 600; }
+  .item-meta { font-size: 12px; color: var(--gray); margin-top: 2px; }
+
+  /* ── TOTALS ── */
+  .totals-section {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--gray);
+    padding: 6px 0;
+  }
+  .total-row.grand {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--dark);
+    border-top: 2px solid var(--border);
+    margin-top: 8px;
+    padding-top: 14px;
+  }
+  .total-row.grand span:last-child { color: var(--blue); }
+  .tax-note { font-size: 11px; color: var(--gray); margin-top: 4px; text-align: right; }
+
+  /* ── PAYMENT METHOD ── */
+  .payment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #eff6ff;
+    color: var(--blue);
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  /* ── FOOTER ── */
+  .invoice-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-note { font-size: 12px; color: var(--gray); max-width: 360px; line-height: 1.7; }
+  .footer-note strong { color: var(--dark); }
+
+  /* ── ACTION BUTTONS ── */
+  .action-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .btn-print {
+    padding: 11px 24px;
+    background: var(--dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-print:hover { background: #111827; }
+  .btn-home {
+    padding: 11px 24px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .btn-home:hover { background: #2563eb; }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: white; padding: 0; }
+    .success-banner, .action-btns { display: none !important; }
+    .invoice-card { box-shadow: none; border-radius: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .invoice-header { padding: 24px 20px; }
+    .invoice-body  { padding: 24px 20px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .invoice-meta { text-align: left; }
+    .action-btns { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SUCCESS BANNER -->
+<div class="success-banner">
+  <div class="check-icon">✔</div>
+  <div>
+    <h2>Order Confirmed! 🎉</h2>
+    <p>Thank you for shopping with Modern Furnitures. Your invoice is ready below.</p>
+  </div>
+</div>
+
+<!-- INVOICE CARD -->
+<div class="invoice-card">
+
+  <!-- Header -->
+  <div class="invoice-header">
+    <div>
+      <div class="brand-name">Modern Furnitures</div>
+      <div class="brand-tagline">Doha, Qatar &nbsp;|&nbsp; +974 22334455 &nbsp;|&nbsp; info@modernfurnitures.qa</div>
+    </div>
+    <div class="invoice-meta">
+      <div class="invoice-title">INVOICE</div>
+      <div class="invoice-id" id="invoiceId">INV-000000</div>
+      <div class="invoice-date" id="invoiceDate">—</div>
+      <div id="trackingIdWrap" style="display:none;margin-top:8px;">
+        <div style="font-size:10px;color:#9ca3af;margin-bottom:3px;">TRACKING ID</div>
+        <div id="trackingIdText" style="font-family:monospace;font-size:11px;color:#60a5fa;word-break:break-all;cursor:pointer;" onclick="copyTrackingId()" title="Click to copy">—</div>
+        <div id="copiedMsg" style="font-size:10px;color:#10b981;display:none;">Copied!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    Payment Received &nbsp;·&nbsp; Order Processing
+  </div>
+
+  <!-- Body -->
+  <div class="invoice-body">
+
+    <!-- Customer + Shipping + Billing Info -->
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-box-label">Bill To</div>
+        <div class="info-row" id="custName">—</div>
+        <div class="info-row" id="custEmail"><span>Email:</span> —</div>
+        <div class="info-row" id="custPhone"><span>Phone:</span> —</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-label">Shipping Address</div>
+        <div class="info-row" id="shipStreet">—</div>
+        <div class="info-row" id="shipCity">—</div>
+        <div class="info-row" id="shipCountry">—</div>
+      </div>
+    </div>
+    <!-- Billing Address (shown only if different) -->
+    <div class="info-grid" id="billingGrid" style="display:none;margin-top:0;">
+      <div class="info-box" style="grid-column:1/-1;">
+        <div class="info-box-label">Billing Address</div>
+        <div class="info-row" id="billName">—</div>
+        <div class="info-row" id="billStreetDisplay">—</div>
+        <div class="info-row" id="billCityDisplay">—</div>
+        <div class="info-row" id="billCountryDisplay">—</div>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="section-title">Order Items</div>
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th style="text-align:center">Qty</th>
+          <th style="text-align:right">Unit Price</th>
+          <th style="text-align:right">Total</th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody">
+        <tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px">No items</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Totals -->
+    <div class="totals-section">
+      <div class="total-row"><span>Subtotal</span><span id="billSubtotal">QAR 0</span></div>
+      <div class="total-row"><span>Shipping</span><span id="billShipping">QAR 50</span></div>
+      <div class="total-row"><span>VAT (5%)</span><span id="billTax">QAR 0</span></div>
+      <div class="total-row grand"><span>Grand Total</span><span id="billTotal">QAR 0</span></div>
+      <div class="tax-note">* VAT included as per Qatar tax regulations</div>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="section-title">Payment Method</div>
+    <div class="payment-badge" id="paymentMethod">
+      💳 Credit / Debit Card
+    </div>
+
+    <!-- Footer -->
+    <div class="invoice-footer">
+      <div class="footer-note">
+        <strong>Thank you for your purchase!</strong><br>
+        Delivery within 3–7 business days. For queries, contact us at
+        <strong>info@modernfurnitures.qa</strong> or <strong>+974 22334455</strong>.
+      </div>
+      <div class="action-btns">
+        <a class="btn-home" id="trackOrderBtn" href="#" style="display:none;background:#10b981;">📦 Track Order</a>
+        <button class="btn-print" onclick="window.print()">🖨️ Print Invoice</button>
+        <a class="btn-home" href="index.html">🏠 Back to Home</a>
+      </div>
+    </div>
+
+  </div><!-- /invoice-body -->
+</div><!-- /invoice-card -->
+
+<!-- RATING & FEEDBACK -->
+<div style="max-width:780px;margin:32px auto 60px;padding:0 16px;">
+  <div style="background:white;border-radius:20px;box-shadow:0 4px 24px rgba(0,0,0,0.08);padding:36px 32px;text-align:center;">
+    <div style="font-size:32px;margin-bottom:8px;">🌟</div>
+    <h3 style="font-size:20px;font-weight:800;color:#1f2937;margin-bottom:6px;">How was your experience?</h3>
+    <p style="color:#6b7280;font-size:13px;margin-bottom:24px;">Your feedback helps us improve. Rate your order experience below.</p>
+
+    <!-- Star Rating -->
+    <div id="starRow" style="display:flex;justify-content:center;gap:10px;margin-bottom:20px;">
+      <span class="star" data-val="1" onclick="setRating(1)" style="font-size:40px;cursor:pointer;color:#d1d5db;transition:color 0.15s;">★</span>
+      <span class="star" data-val="2" onclick="setRating(2)" style="font-size:40px;cursor:pointer;color:#d1d5db;transition:color 0.15s;">★</span>
+      <span class="star" data-val="3" onclick="setRating(3)" style="font-size:40px;cursor:pointer;color:#d1d5db;transition:color 0.15s;">★</span>
+      <span class="star" data-val="4" onclick="setRating(4)" style="font-size:40px;cursor:pointer;color:#d1d5db;transition:color 0.15s;">★</span>
+      <span class="star" data-val="5" onclick="setRating(5)" style="font-size:40px;cursor:pointer;color:#d1d5db;transition:color 0.15s;">★</span>
+    </div>
+    <div id="ratingLabel" style="font-size:14px;font-weight:600;color:#6b7280;margin-bottom:20px;min-height:20px;"></div>
+
+    <!-- Feedback Text -->
+    <textarea id="feedbackText" placeholder="Write your feedback here... (optional)" style="
+      width:100%;max-width:480px;padding:14px 16px;
+      border:1.5px solid #e5e7eb;border-radius:10px;
+      font-size:14px;font-family:'DM Sans',sans-serif;
+      resize:vertical;min-height:90px;outline:none;
+      color:#1f2937;background:#fafafa;
+      transition:border-color 0.2s;
+      display:block;margin:0 auto 20px;
+    " onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e5e7eb'"></textarea>
+
+    <!-- Submit -->
+    <button onclick="submitFeedback()" style="
+      padding:12px 32px;background:#1f2937;color:white;
+      border:none;border-radius:10px;font-size:14px;font-weight:700;
+      cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;
+    " onmouseover="this.style.background='#111827'" onmouseout="this.style.background='#1f2937'">
+      Submit Feedback
+    </button>
+    <p id="feedbackMsg" style="margin-top:14px;font-size:13px;min-height:18px;"></p>
+  </div>
+</div>
+
+<script>
+let selectedRating = 0;
+const labels = ['','😞 Poor','😐 Fair','😊 Good','😃 Very Good','🤩 Excellent!'];
+
+function setRating(val) {
+  selectedRating = val;
+  document.querySelectorAll('.star').forEach(s => {
+    s.style.color = parseInt(s.dataset.val) <= val ? '#f59e0b' : '#d1d5db';
+  });
+  document.getElementById('ratingLabel').innerText = labels[val];
+}
+
+async function submitFeedback() {
+  const msg     = document.getElementById('feedbackMsg');
+  const text    = document.getElementById('feedbackText').value.trim();
+  const info    = JSON.parse(sessionStorage.getItem('orderInfo') || localStorage.getItem('orderInfo') || '{}');
+  const orderId = sessionStorage.getItem('orderId') || localStorage.getItem('orderId') || '';
+  const name    = ((info.firstName||'') + ' ' + (info.lastName||'')).trim() || 'Customer';
+  const email   = info.email || '';
+
+  if (!selectedRating) {
+    msg.style.color = '#ef4444';
+    msg.innerText = 'Please select a star rating ❌';
+    return;
+  }
+  msg.style.color = '#6b7280'; msg.innerText = 'Saving...';
+  try {
+    await fetch('https://modernfurnitures-backend.onrender.com/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, rating: selectedRating, text, orderId })
+    });
+  } catch(e) { /* backend offline — still show thank you */ }
+
+  msg.style.color = '#10b981';
+  msg.innerText = '🎉 Thank you for your feedback!';
+  document.querySelectorAll('.star').forEach(s => s.style.pointerEvents = 'none');
+  document.getElementById('feedbackText').disabled = true;
+  document.querySelector('button[onclick="submitFeedback()"]').disabled = true;
+}
+</script>
+
+<script>
+// ── HELPERS ──
+function copyTrackingId() {
+  const id = document.getElementById('trackingIdText').innerText;
+  navigator.clipboard.writeText(id).then(() => {
+    const msg = document.getElementById('copiedMsg');
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2000);
+  });
+}
+
+function generateOrderId() {
+  return 'INV-' + Date.now().toString().slice(-6);
+}
+function formatDate(d) {
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' }) +
+         ' at ' + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+}
+function qar(n) { return 'QAR ' + Number(n).toLocaleString(); }
+
+// ── LOAD DATA ──
+window.addEventListener('DOMContentLoaded', function () {
+
+  // ── ORDER ID & DATE ──
+  // Read from sessionStorage first (survives refresh), fallback to localStorage
+  const savedOrderId = sessionStorage.getItem('orderId') || localStorage.getItem('orderId');
+  const displayId = savedOrderId ? 'INV-' + savedOrderId.slice(-6).toUpperCase() : generateOrderId();
+  document.getElementById('invoiceId').innerText   = displayId;
+  document.getElementById('invoiceDate').innerText = formatDate(new Date());
+
+  // Wire up Track Order button with the real MongoDB _id
+  const trackBtn = document.getElementById('trackOrderBtn');
+  if (savedOrderId) {
+    trackBtn.href = 'track-order.html?id=' + savedOrderId;
+    trackBtn.style.display = 'inline-flex';
+    document.getElementById('trackingIdWrap').style.display = 'block';
+    document.getElementById('trackingIdText').innerText = savedOrderId;
+  }
+
+  // ── CUSTOMER INFO — use sessionStorage so refresh works ──
+  const info = JSON.parse(
+    sessionStorage.getItem('orderInfo') || localStorage.getItem('orderInfo') || '{}'
+  );
+  // Save to sessionStorage so refresh keeps it
+  if (localStorage.getItem('orderInfo')) {
+    sessionStorage.setItem('orderInfo', localStorage.getItem('orderInfo'));
+  }
+
+  const _b = sessionStorage.getItem('billCart') || localStorage.getItem('billCart');
+  const _c = sessionStorage.getItem('cartData') || localStorage.getItem('cartData');
+  const cart = JSON.parse(_b || _c || '[]');
+  // Save cart to sessionStorage so refresh works
+  if (cart.length) sessionStorage.setItem('cartData', JSON.stringify(cart));
+  localStorage.removeItem('billCart');
+  localStorage.removeItem('cartData');
+
+  // Customer
+  const fullName = ((info.firstName || '') + ' ' + (info.lastName || '')).trim() || 'Guest Customer';
+  document.getElementById('custName').innerText    = fullName;
+  document.getElementById('custEmail').innerHTML   = '<span>Email:</span> ' + (info.email   || '—');
+  document.getElementById('custPhone').innerHTML   = '<span>Phone:</span> ' + (info.phone   || '—');
+
+  // Shipping
+  document.getElementById('shipStreet').innerText  = info.street  || '—';
+  const cityState = [info.city, info.state].filter(Boolean).join(', ');
+  document.getElementById('shipCity').innerText    = cityState    || '—';
+  document.getElementById('shipCountry').innerText = info.country || 'Qatar';
+
+  // Billing (show only if different from shipping)
+  if (!info.sameBilling && info.billing) {
+    const b = info.billing;
+    document.getElementById('billingGrid').style.display = 'grid';
+    document.getElementById('billName').innerText         = ((b.firstName||'') + ' ' + (b.lastName||'')).trim() || '—';
+    document.getElementById('billStreetDisplay').innerText = b.street  || '—';
+    const bCityState = [b.city, b.state].filter(Boolean).join(', ');
+    document.getElementById('billCityDisplay').innerText   = bCityState || '—';
+    document.getElementById('billCountryDisplay').innerText = b.country || '—';
+  }
+
+  // Payment
+  const payLabels = {
+    card:  '💳 Credit / Debit Card',
+    apple: '🍎 Apple Pay',
+    cod:   '💵 Cash on Delivery'
+  };
+  document.getElementById('paymentMethod').innerText =
+    payLabels[info.payment] || '💳 Credit / Debit Card';
+
+  // ── ITEMS ──
+  const tbody = document.getElementById('itemsBody');
+  if (cart.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#9ca3af;padding:20px">No items found</td></tr>';
+  } else {
+    tbody.innerHTML = '';
+    cart.forEach(item => {
+      const lineTotal = item.price * item.qty;
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="item-name">${item.name}</div>
+            <div class="item-meta">Modern Furnitures Collection</div>
+          </td>
+          <td style="text-align:center">${item.qty}</td>
+          <td style="text-align:right">${qar(item.price)}</td>
+          <td>${qar(lineTotal)}</td>
+        </tr>`;
+    });
+  }
+
+  // ── TOTALS ──
+  const subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping  = info.shipping === 'free' ? 0 : 50;
+  const tax       = Math.round(subtotal * 0.05);
+  const grand     = subtotal + shipping + tax;
+
+  document.getElementById('billSubtotal').innerText = qar(subtotal);
+  document.getElementById('billShipping').innerText = shipping === 0 ? 'FREE' : qar(shipping);
+  document.getElementById('billTax').innerText      = qar(tax);
+  document.getElementById('billTotal').innerText    = qar(grand);
+
+  // ── SAVE CART SNAPSHOT FOR BILL (in case already cleared) ──
+  // Cart is cleared only after bill is fully rendered via Print/Home button
+});
+</script>
+
+</body>
+</html>

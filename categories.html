@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Categories - Modern Furnitures</title>
+ <link rel="stylesheet" href="style.css?v=3">
+ <style>
+   .categories-grid {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 24px;
+     padding: 20px 40px 50px;
+     max-width: 1200px;
+     margin: 0 auto;
+   }
+   .category-card {
+     background: white;
+     border-radius: 16px;
+     padding: 36px 20px;
+     text-align: center;
+     cursor: pointer;
+     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+     border: 2px solid transparent;
+   }
+   .category-card:hover {
+     transform: translateY(-6px);
+     box-shadow: 0 10px 28px rgba(59,130,246,0.2);
+     border-color: #3b82f6;
+   }
+   .cat-icon { font-size: 48px; margin-bottom: 14px; }
+   .category-card h3 { font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 8px; }
+   .category-card p { font-size: 13px; color: #6b7280; }
+   @media(max-width:768px) {
+     .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 12px; }
+     .cat-icon { font-size: 36px; }
+     .category-card { padding: 24px 14px; }
+   }
+ </style>
+</head>
+<body>
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+ <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+ <h1 class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Modern Furnitures</h1>
+ <div class="search-box">
+   <input type="text" placeholder="Search products...">
+ </div>
+ <nav>
+   <a href="index.html">Home</a>
+   <a href="products.html">Products</a>
+   <a href="about.html">About</a>
+   <a href="categories.html">Categories</a>
+   <a href="contact.html">Contact</a>
+   <a href="#" onclick="openCartPanel()">Cart (<span id="cartCount">0</span>)</a>
+ </nav>
+</header>
+
+
+<!-- CATEGORIES -->
+<section style="padding-top: 20px;">
+ <h2 class="section-title">CATEGORIES</h2>
+ <div class="categories-grid">
+
+
+   <div class="category-card" onclick="window.location.href='categories/living-room.html'">
+     <div class="cat-icon">🛋️</div>
+     <h3>Living Room</h3>
+     <p>Sofas, Coffee Tables, TV Stands</p>
+   </div>
+
+   <div class="category-card" onclick="window.location.href='categories/bedroom.html'">
+     <div class="cat-icon">🛏️</div>
+     <h3>Bedroom</h3>
+     <p>Beds, Wardrobes, Dressers</p>
+   </div>
+
+   <div class="category-card" onclick="window.location.href='categories/dining.html'">
+     <div class="cat-icon">🍽️</div>
+     <h3>Dining</h3>
+     <p>Dining Tables, Chairs</p>
+   </div>
+
+   <div class="category-card" onclick="window.location.href='categories/office.html'">
+     <div class="cat-icon">💼</div>
+     <h3>Office</h3>
+     <p>Office Chairs, Bookshelves</p>
+   </div>
+
+   <div class="category-card" onclick="window.location.href='categories/storage.html'">
+     <div class="cat-icon">📦</div>
+     <h3>Storage</h3>
+     <p>Wardrobes, Bookshelves, Dressers</p>
+   </div>
+
+   <div class="category-card" onclick="window.location.href='products.html'">
+     <div class="cat-icon">🏠</div>
+     <h3>All Products</h3>
+     <p>Browse everything</p>
+   </div>
+
+
+ </div>
+</section>
+
+
+<!-- CART PANEL -->
+<div id="cartPanel" class="cart-panel">
+ <div class="cart-panel-header">
+   <span>SHOPPING CART <span id="cartBadge" class="cart-badge">0</span></span>
+   <button onclick="closeCartPanel()">&#10005;</button>
+ </div>
+ <hr>
+ <div id="cartPanelItems" class="cart-panel-items"></div>
+ <div class="cart-panel-footer">
+   <hr>
+   <div class="cart-subtotal">
+     <span>SUBTOTAL:</span>
+     <span id="cartPanelTotal">QAR 0</span>
+   </div>
+   <div class="cart-view-link" onclick="window.location.href='cart.html'">VIEW CART</div>
+   <button class="cart-checkout-btn" onclick="goCheckoutAll()">CHECKOUT</button>
+ </div>
+</div>
+<div id="cartOverlay" class="cart-overlay" onclick="closeCartPanel()"></div>
+
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="bottom-nav">
+ <a href="#" onclick="toggleBottomSearch()">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+   </svg>
+   Search
+ </a>
+ <a href="#" onclick="openCartPanel()">
+   <div class="bn-cart-wrap">
+     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+     </svg>
+     <span class="bn-badge" id="bnCartBadge">0</span>
+   </div>
+   Cart
+ </a>
+ <a href="categories.html">
+   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+   </svg>
+   Categories
+ </a>
+</div>
+
+
+<script src="script.js?v=3"></script>
+<script>
+ window.addEventListener('DOMContentLoaded', function() {
+   loadCart();
+ });
+</script>
+
+
+</body>
+</html>
+
