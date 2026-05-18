@@ -1028,32 +1028,6 @@ function closeForgot() { document.getElementById('forgotBox').style.display = 'n
 
 
 
-async function sendForgotOtp() {
-const email = document.getElementById('forgotEmail').value.trim();
-const msg   = document.getElementById('forgotMsg');
-if (!email) { msg.style.color='red'; msg.innerText='Please enter your email ❌'; return; }
-msg.style.color='#6b7280'; msg.innerText='Sending OTP...';
-try {
-  const res  = await fetch(API_BASE + '/auth/forgot-password', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ email })
-  });
-  const data = await res.json();
-  if (res.ok) {
-    document.getElementById('forgotStep2').style.display = 'block';
-    msg.style.color = 'green'; msg.innerText = data.message || 'OTP sent! Check your email.';
-  } else {
-    msg.style.color = 'red'; msg.innerText = data.error || 'Failed to send OTP ❌';
-  }
-} catch(e) {
-  msg.style.color='red'; msg.innerText='Server error. Make sure backend is running ❌';
-}
-}
-
-
-
-
-
 
 
 
@@ -1111,37 +1085,6 @@ try {
 } catch(e) {
   msg.style.color='red'; msg.innerText='Server error. Make sure backend is running ❌';
 }
-}
-
-
-
-
-
-
-
-
-let generatedOtp = '';
-async function sendOtp() {
-const email = document.getElementById('regEmail')?.value?.trim();
-const msg   = document.getElementById('registerMsg');
-if (!email) { msg.style.color='red'; msg.innerText='Enter your email first ❌'; return; }
-msg.style.color='#6b7280'; msg.innerText='Sending OTP...';
-try {
-  const res  = await fetch(API_BASE + '/auth/send-otp', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ email })
-  });
-  const data = await res.json();
-  if (res.ok) {
-    msg.style.color='green'; msg.innerText = data.message || 'OTP sent! Check your email.';
-  } else {
-    msg.style.color='red'; msg.innerText = data.error || 'Failed to send OTP ❌';
-  }
-} catch(e) {
-  msg.style.color='red'; msg.innerText='Server error. Make sure backend is running ❌';
-}
-}
-
 
 
 
